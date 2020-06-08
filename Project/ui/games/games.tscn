@@ -1,0 +1,64 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://ui/alien.theme" type="Theme" id=1]
+
+[node name="Games" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ListControls" type="HBoxContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="ListControls"]
+margin_right = 924.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+text = "Games"
+
+[node name="Add" type="Button" parent="ListControls"]
+margin_left = 928.0
+margin_right = 965.0
+margin_bottom = 22.0
+text = "Add"
+
+[node name="Delete" type="Button" parent="ListControls"]
+margin_left = 969.0
+margin_right = 1024.0
+margin_bottom = 22.0
+text = "Delete"
+
+[node name="GameList" type="ItemList" parent="."]
+margin_top = 26.0
+margin_right = 1024.0
+margin_bottom = 574.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="NameControls" type="HBoxContainer" parent="."]
+margin_top = 578.0
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="ChangeName" type="Button" parent="NameControls"]
+margin_right = 100.0
+margin_bottom = 22.0
+text = "Change Name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GameName" type="LineEdit" parent="NameControls"]
+margin_left = 104.0
+margin_right = 1024.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+placeholder_text = "Game Name"
