@@ -25,6 +25,10 @@ boot_splash/bg_color=Color( 0.141176, 0.141176, 0.141176, 1 )
 config/icon="res://icon/icon.png"
 config/windows_native_icon="res://icon/icon.ico"
 
+[autoload]
+
+UIState="*res://ui/ui_state/ui_state.gd"
+
 [gui]
 
 theme/use_hidpi=true
