@@ -25,6 +25,12 @@ boot_splash/bg_color=Color( 0.141176, 0.141176, 0.141176, 1 )
 config/icon="res://icon/icon.png"
 config/windows_native_icon="res://icon/icon.ico"
 
+[gui]
+
+theme/use_hidpi=true
+theme/custom="res://ui/alien.theme"
+
 [rendering]
 
+environment/default_clear_color=Color( 0.141176, 0.141176, 0.141176, 1 )
 environment/default_environment="res://default_env.tres"
