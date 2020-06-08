@@ -1,7 +1,10 @@
 extends Node
 
 
+signal state_switched(new_state, prev_state)
+
 var _states: Dictionary
+var _current_state: String = ""
 
 
 func _init() -> void:
@@ -15,14 +18,25 @@ func add_state(name: String) -> void:
 
 func remove_state(name: String) -> void:
 	assert(_states.has(name))
+	assert(name != _current_state)
+
 # warning-ignore:return_value_discarded
 	_states.erase(name)
 
 
 func switch_state(name: String) -> void:
 	assert(_states.has(name))
+	var old_state: String = _current_state
+	_current_state = name
+
 	for task in _states[name]:
 		_perform_task(task)
+
+	emit_signal("state_switched", _current_state, old_state)
+
+
+func get_current_state() -> String:
+	return _current_state
 
 
 func add_task_to_state(name: String, target: Object, method_name: String) -> void:
