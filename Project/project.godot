@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Save Scum"
-run/main_scene="res://ui/main_ui.tscn"
+run/main_scene="res://ui/main_ui/main_ui.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="dfaction/save_scum"
 boot_splash/image="res://icon/splash.png"
@@ -31,7 +31,6 @@ UIState="*res://ui/ui_state/ui_state.gd"
 
 [gui]
 
-theme/use_hidpi=true
 theme/custom="res://ui/alien.theme"
 
 [rendering]
