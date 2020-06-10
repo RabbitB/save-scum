@@ -8,9 +8,38 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Resource",
+"class": "DirectoryBranch",
+"language": "GDScript",
+"path": "res://scummed_save/directory_branch.gd"
+}, {
+"base": "Resource",
+"class": "FileLocker",
+"language": "GDScript",
+"path": "res://scummed_save/file_locker.gd"
+}, {
+"base": "Reference",
+"class": "Log",
+"language": "GDScript",
+"path": "res://addons/chino/global/log.gd"
+}, {
+"base": "Resource",
+"class": "SaveSnapshot",
+"language": "GDScript",
+"path": "res://scummed_save/save_snapshot.gd"
+}, {
+"base": "Resource",
+"class": "ScummedSave",
+"language": "GDScript",
+"path": "res://scummed_save/scummed_save.gd"
+} ]
 _global_script_class_icons={
-
+"DirectoryBranch": "",
+"FileLocker": "",
+"Log": "",
+"SaveSnapshot": "",
+"ScummedSave": ""
 }
 
 [application]
