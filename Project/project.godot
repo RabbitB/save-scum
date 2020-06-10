@@ -19,6 +19,7 @@ config/name="Save Scum"
 run/main_scene="res://ui/main_ui/main_ui.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="dfaction/save_scum"
+run/low_processor_mode=true
 boot_splash/image="res://icon/splash.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.141176, 0.141176, 0.141176, 1 )
