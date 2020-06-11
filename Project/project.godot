@@ -10,14 +10,14 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Resource",
-"class": "DirectoryBranch",
-"language": "GDScript",
-"path": "res://scummed_save/directory_branch.gd"
-}, {
-"base": "Resource",
 "class": "FileLocker",
 "language": "GDScript",
 "path": "res://scummed_save/file_locker.gd"
+}, {
+"base": "Resource",
+"class": "FileSystemSnapshot",
+"language": "GDScript",
+"path": "res://scummed_save/file_system_snapshot.gd"
 }, {
 "base": "Reference",
 "class": "Log",
@@ -35,8 +35,8 @@ _global_script_classes=[ {
 "path": "res://scummed_save/scummed_save.gd"
 } ]
 _global_script_class_icons={
-"DirectoryBranch": "",
 "FileLocker": "",
+"FileSystemSnapshot": "",
 "Log": "",
 "SaveSnapshot": "",
 "ScummedSave": ""
