@@ -2,17 +2,18 @@ class_name GameID
 extends Resource
 
 
-export(String) var name: String
-export(int) var creation_time: int
+export(String) var game_name: String
+export(int) var game_id: int = -1
 
 
 func _init(new_name: String = "") -> void:
 	if !new_name.empty():
-		name = new_name
-
-	creation_time = OS.get_unix_time()
+		game_name = new_name
 
 
-func get_game_id(salt: int = 0) -> String:
-	return ("%d.%d" % [salt, creation_time]).md5_text()
+func get_game_id() -> int:
+	if game_id < 0:
+		game_id = ScumDB.get_new_game_id()
+
+	return game_id
 
