@@ -5,7 +5,7 @@ extends Resource
 export(Dictionary) var directory_paths: Dictionary
 export(Dictionary) var file_paths: Dictionary
 
-export(String) var _root_path: String
+export(String) var snapshot_of_path: String
 
 
 func _init() -> void:
@@ -13,12 +13,12 @@ func _init() -> void:
 	file_paths = {}
 
 
-func take_snapshot(root_path: String) -> int:
-	_root_path = root_path
-	return _find_sub_directories(root_path)
+func take_snapshot(of_path: String) -> int:
+	snapshot_of_path = of_path
+	return _find_sub_directories(of_path)
 
 
-func find_new_files(compare_to: FileSystemSnapshot) -> Array:
+func files_missing_in(compare_to: FileSystemSnapshot) -> Array:
 	if !_can_compare_snapshots(compare_to):
 		Log.error("Can only compare hierarchies with the same root path.")
 		return []
@@ -31,11 +31,7 @@ func find_new_files(compare_to: FileSystemSnapshot) -> Array:
 	return new_files
 
 
-func find_missing_files(compare_to: FileSystemSnapshot) -> Array:
-	return compare_to.find_new_files(self)
-
-
-func find_modified_files(compare_to: FileSystemSnapshot) -> Array:
+func files_modified_from(compare_to: FileSystemSnapshot) -> Array:
 	if !_can_compare_snapshots(compare_to):
 		Log.error("Can only compare hierarchies with the same root path.")
 		return []
@@ -48,7 +44,7 @@ func find_modified_files(compare_to: FileSystemSnapshot) -> Array:
 	return modified_files
 
 
-func find_new_directories(compare_to: FileSystemSnapshot) -> Array:
+func directories_missing_in(compare_to: FileSystemSnapshot) -> Array:
 	if !_can_compare_snapshots(compare_to):
 		Log.error("Can only compare hierarchies with the same root path.")
 		return []
@@ -59,10 +55,6 @@ func find_new_directories(compare_to: FileSystemSnapshot) -> Array:
 			new_dirs.append(dir_path)
 
 	return new_dirs
-
-
-func find_missing_directories(compare_to: FileSystemSnapshot) -> Array:
-	return compare_to.find_new_directories(self)
 
 
 func _find_sub_directories(root_path: String) -> int:
@@ -95,7 +87,7 @@ func _find_sub_directories(root_path: String) -> int:
 				dir.list_dir_end()
 				return error
 		else:
-			file_paths[abs_item_path] = file_helper.get_md5(abs_item_path)
+			file_paths[abs_item_path] = file_helper.get_sha256(abs_item_path)
 
 		file_name = dir.get_next()
 
@@ -103,5 +95,5 @@ func _find_sub_directories(root_path: String) -> int:
 
 
 func _can_compare_snapshots(compare_to: FileSystemSnapshot) -> bool:
-	return !_root_path.empty() && _root_path == compare_to._root_path
+	return !snapshot_of_path.empty() && snapshot_of_path == compare_to.snapshot_of_path
 
