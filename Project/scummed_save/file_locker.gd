@@ -8,7 +8,7 @@ export(PoolByteArray) var stored_data: PoolByteArray
 export(bool) var is_compressed: bool
 
 export(String) var file_path: String
-export(String) var file_md5: String
+export(String) var file_hash: String
 export(int) var file_size: int
 
 
@@ -21,7 +21,7 @@ func store_file(path: String) -> bool:
 		return false
 
 	file_path = path
-	file_md5 = file_to_store.get_md5(file_path)
+	file_hash = file_to_store.get_sha256(file_path)
 	file_size = file_to_store.get_len()
 
 	var raw_data: PoolByteArray = file_to_store.get_buffer(file_size)
