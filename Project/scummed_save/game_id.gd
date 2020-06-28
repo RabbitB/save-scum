@@ -11,6 +11,10 @@ func _init(new_name: String = "") -> void:
 		game_name = new_name
 
 
+func _to_string() -> String:
+	return "%x" % get_game_id()
+
+
 func get_game_id() -> int:
 	if game_id < 0:
 		game_id = ScumDB.get_new_game_id()
