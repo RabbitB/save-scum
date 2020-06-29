@@ -5,8 +5,9 @@ extends Node2D
 signal dragged(dragged_node, drag_event)
 
 enum ParentTypes {
-	NODE2D,
+	CANVAS_ITEM,
 	SPRITE,
+	CONTROL,
 	COLLISION_OBJ,
 }
 
@@ -27,9 +28,10 @@ enum DRAG_EVENTS {
 export(Rect2) var draggable_area: Rect2 = Rect2(0, 0, 16, 16) setget _set_draggable_area
 export(MODIFIER_KEYS) var hold_key_to_drag: int = MODIFIER_KEYS.NONE
 
-var _cached_parent: Node2D
-var _dragging_node: bool
+var _cached_parent: CanvasItem
 var _parent_type: int
+var _dragging_node: bool
+var _drag_start_relative_to_position: Vector2
 
 
 func _ready() -> void:
@@ -50,6 +52,17 @@ func _input(event: InputEvent) -> void:
 				var sprite = _cached_parent as Sprite
 				if sprite.get_rect().has_point(sprite.get_local_mouse_position()):
 					_dragging_node = true
+					_drag_start_relative_to_position = sprite.global_position - get_global_mouse_position()
+
+					emit_signal("dragged", DRAG_EVENTS.STARTED)
+					get_tree().set_input_as_handled()
+
+			elif _parent_type == ParentTypes.CONTROL:
+				var control = _cached_parent as Control
+				if control.get_global_rect().has_point(get_global_mouse_position()):
+					_dragging_node = true
+					_drag_start_relative_to_position = control.rect_global_position - get_global_mouse_position()
+
 					emit_signal("dragged", DRAG_EVENTS.STARTED)
 					get_tree().set_input_as_handled()
 
@@ -57,22 +70,29 @@ func _input(event: InputEvent) -> void:
 			elif !_parent_type == ParentTypes.COLLISION_OBJ:
 				if draggable_area.has_point(get_local_mouse_position()):
 					_dragging_node = true
+					_drag_start_relative_to_position = get_local_mouse_position()
+
 					emit_signal("dragged", DRAG_EVENTS.STARTED)
 					get_tree().set_input_as_handled()
 
 		else:
 			_dragging_node = false
+			_drag_start_relative_to_position = Vector2.ZERO
 			emit_signal("dragged", DRAG_EVENTS.ENDED)
 
 	elif event is InputEventMouseMotion:
 		if _dragging_node:
-			_cached_parent.global_position = get_global_mouse_position()
+			if _parent_type == ParentTypes.CONTROL:
+				_cached_parent.set_global_position(get_global_mouse_position() + _drag_start_relative_to_position)
+			else:
+				_cached_parent.global_position = get_global_mouse_position() + _drag_start_relative_to_position
+
 			emit_signal("dragged", DRAG_EVENTS.DRAGGING)
 			get_tree().set_input_as_handled()
 
 
 func _draw() -> void:
-	if Engine.editor_hint && _parent_type == ParentTypes.NODE2D:
+	if Engine.editor_hint && _parent_type == ParentTypes.CANVAS_ITEM:
 		draw_rect(draggable_area, Color.violet, false, 1.0, true)
 
 
@@ -85,8 +105,8 @@ func _notification(what: int) -> void:
 func _get_configuration_warning() -> String:
 	var parent: Node = get_parent()
 
-	if !parent || !(parent is Node2D):
-		return "DraggableNode must be a child of Node2D or a class that extends Node2D."
+	if !parent || !(parent is CanvasItem):
+		return "DraggableNode must be a child of CanvasItem or a class that extends CanvasItem."
 
 	return ""
 
@@ -102,7 +122,7 @@ func _parent_changed() -> void:
 		_cached_parent.disconnect("input_event", self, "_on_parent_input_event")
 
 	var parent: Node = get_parent()
-	if !parent or !(parent is Node2D):
+	if !parent or !(parent is CanvasItem):
 		_cached_parent = null
 		return
 
@@ -110,12 +130,14 @@ func _parent_changed() -> void:
 
 	if _cached_parent is Sprite:
 		_parent_type = ParentTypes.SPRITE
+	elif _cached_parent is Control:
+		_parent_type = ParentTypes.CONTROL
 	elif _cached_parent is CollisionObject2D:
 		_parent_type = ParentTypes.COLLISION_OBJ
 # warning-ignore:return_value_discarded
 		_cached_parent.connect("input_event", self, "_on_parent_input_event")
 	else:
-		_parent_type = ParentTypes.NODE2D
+		_parent_type = ParentTypes.CANVAS_ITEM
 
 	if Engine.editor_hint:
 		update()
